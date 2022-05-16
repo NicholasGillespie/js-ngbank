@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NG Bank</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+  <header class="container ctn100pct">
+    <nav class="[ cluster ][ jc:space-between fw:nowrap ]">
+      <p>Welcome back, Name!</p>
+      <img src="/assets/img/NG Flavicon 003.png" alt="logo">
+      <form class="[ cluster clus-s-4  ][ fw:nowrap ]">
+        <input type="text" placeholder="user">
+        <input type="password" placeholder="PIN">
+        <button>→</button>
+      </form>
+    </nav>
+  </header>
+
+  <main class="container cont-s2">
+    <article class="stack stack-s3">
+      <header class="[ cluster ][ jc:space-between ]">
+        <div>
+          <p>Current balance</p>
+          <p>As of <span>Date, Time</span></p>
+        </div>
+        <p>Balance €</p>
+      </header>
+
+      <div class="sidebar-right">
+        <section class="movements">
+          <div class="box cluster">
+            <p class="movements__type movements__type--withdrawal">X deposit</p>
+            <p>amount €</p>
+          </div>
+          <div class="box cluster">
+            <p class="movements__type movements__type--deposit">X deposit</p>
+            <p>X deposit</p>
+            <p>amount €</p>
+          </div>
+          <div class="box cluster">
+            <p class="movements__type movements__type--withdrawal">X deposit</p>
+            <p>amount €</p>
+          </div>
+          <div class="box cluster">
+            <p class="movements__type movements__type--withdrawal">X deposit</p>
+            <p>amount €</p>
+          </div>
+        </section>
+
+        <section class="[ stack stack-s-pad-comp ][ operations ]">
+          <div class="[ box ][ stack ][ operation--transfer ]">
+            <p>Transfer money</p>
+            <form>
+              <input type="text">
+              <input type="number">
+              <button>→</button>
+            </form>
+          </div>
+          <div class="[ box ][ operation--loan ]">
+            <form>
+              <input type="number">
+              <button>→</button>
+            </form>
+          </div>
+          <div class="[ box ][ operation--close ]">
+            <form>
+              <input type="text">
+              <input type="password">
+              <button>→</button>
+            </form>
+          </div>
+        </section>
+      </div>
+
+
+
+    </article>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

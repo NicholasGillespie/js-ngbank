@@ -1,0 +1,267 @@
+/* FONTS **************************************** */
+@font-face {
+  font-family: 'Poppins';
+  src: local("Poppins"), url(assets/fonts/Poppins-Thin.ttf);
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: local("Poppins"), url(assets/fonts/Poppins-Light.ttf);
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: local("Poppins"), url(assets/fonts/Poppins-Regular.ttf);
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: local("Poppins"), url(assets/fonts/Poppins-SemiBold.ttf);
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: local("Poppins"), url(assets/fonts/Poppins-Bold.ttf);
+  font-weight: 700;
+}
+
+/* RESET **************************************** */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  word-break: break-word;
+}
+
+/* ROOT **************************************** */
+:root {
+  /* font-family */
+  --font-sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+  /* --font-serif: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol; */
+
+  /* font weight */
+  --fw-thin: 100;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-semi-bold: 600;
+  --fw-bold: 700;
+
+  /* modular scale */
+  /* 1em | 0.75em  | 0.563em | 0.422em | 0.317em | 0.238em */
+  /* 1em | 1.333em | 1.777em | 2.369em | 3.157em | 4.209em */
+  --ratio: 1.333;
+  --s-5: calc(var(--s-4) / var(--ratio));
+  --s-4: calc(var(--s-3) / var(--ratio));
+  --s-3: calc(var(--s-2) / var(--ratio));
+  --s-2: calc(var(--s-1) / var(--ratio));
+  --s-1: calc(var(--s0) / var(--ratio));
+  --s0:calc(1rem + 0.333vw);
+  --s1: calc(var(--s0) * var(--ratio));
+  --s2: calc(var(--s1) * var(--ratio));
+  --s3: calc(var(--s2) * var(--ratio));
+  --s4: calc(var(--s3) * var(--ratio));
+  --s5: calc(var(--s4) * var(--ratio));
+
+  /* sizes */
+  --max-inline-size: 1280px;
+  /* --min-inline-size: 320px; */
+  --line-height: 1;
+
+  /* paddings */
+  --pad-comp: var(--s0);
+  --pad-box: var(--s1);
+  --pad-ele: var(--s0);
+
+  /* colors */
+  --clr-light: hsl(0, 0%, 100%);
+  --clr-dark: hsl(0, 0%, 27%);
+  --clr-bg: hsl(0, 0%, 95%);
+  --clr-border: hsl(0, 0%, 80%);
+  --clr-gray-light: hsl(0, 0%, 53%);
+  --clr-green: hsl(128, 47%, 59%);
+  --clr-red: hsl(352, 90%, 62%);
+  --clr-input-focus: hsl(0, 0%, 75%);
+
+  /* border */
+  --border-clr: var(--clr-light);
+  --border-style: solid;
+  --border-width: 1px;
+  --border: var(--border-clr) var(--border-style) var(--border-width);
+}
+
+/* GLOBAL **************************************** */
+body {
+  font-family: 'Poppins', var(--font-sans-serif);
+  font-size: var(--s0);
+  line-height: var(--line-height);
+  color: var(--clr-dark);
+  background-color: var(--clr-bg);
+  min-inline-size: var(--min-inline-size);
+  overflow-x: hidden;
+}
+
+/* nav */
+:where(nav, header) p {
+  font-size: var(--s0);
+  font-weight: var(--fw-semi-bold);
+}
+
+nav img {
+  block-size: var(--s3);
+}
+
+nav input {
+  border-radius: var(--s0);
+  border: var(--border);
+  padding: var(--s-3) var(--s2);
+  width: 8rem;
+  color: var(--clr-dark);
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: center;
+}
+nav input::placeholder {
+  color: var(--clr-input-focus);
+}
+
+nav input:focus,
+ input:hover {
+  border: none;
+  outline: 1px solid var(--clr-input-focus);
+}
+
+nav button {
+  border: none;
+  background: none;
+  font-size: var(--s0);
+  color: inherit;
+  cursor: pointer;
+}
+
+/* main header */
+header div :last-child {
+  color: var(--clr-gray-light);
+  font-size: var(--s-1);
+  font-weight: var(--fw-regular);
+}
+
+article header div > p:last-of-type {
+  margin-block-start: var(--s-3);
+}
+
+article header > p {
+  font-size: var(--s3);
+  font-weight: var(--fw-regular);
+}
+
+/* main sidebar-section */
+
+
+/* COMPOSITION **************************************** */
+.box {
+  padding: var(--s1) var(--s2);
+  background-color: var(--clr-light);
+}
+
+.container {
+  padding: var(--s-container, var(--s0)) max(var(--s3), 50vw - var(--containerWidth, var(--max-inline-size)) / 2);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: var(--flex-wrap, wrap);
+  gap: var(--s-cluster, var(--pad-ele));
+  justify-content: var(--justify-content, flex-start);
+  align-items: center;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.stack > * {margin-block: 0;} 
+.stack > * + * {margin-block-start: var(--s-stack, var(--s0));}
+
+.sidebar-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pad-comp);
+}
+.sidebar-right > :last-child {flex-grow: 1;}
+.sidebar-right > :first-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 50%;
+}
+
+/* UTILITY **************************************** */
+.ctn100pct {--containerWidth: 100%;}
+.jc\:space-between {--justify-content: space-between;}
+.fw\:nowrap {--flex-wrap: nowrap;}
+
+/* utility space */
+.cont-s2 {--s-container: var(--s2);}
+.clus-s-4 {--s-cluster: var(--s-4);}
+.stack-s-pad-comp {--s-stack: var(--pad-comp);}
+.stack-s3 {--s-stack: var(--s3);}
+
+/* BLOCK **************************************** */
+/* movements */
+.movements .box:first-of-type {
+  border-start-end-radius: var(--s-2);
+  border-start-start-radius: var(--s-2);
+}
+.movements .box:last-of-type {
+  border-end-end-radius: var(--s-2);
+  border-end-start-radius: var(--s-2);
+}
+.movements .box ~ .box {
+  border-block-start: var(--border);
+  border-color: var(--clr-bg);
+}
+.movements .box p {
+  font-size: var(--s-2);
+}
+.movements__type {
+  border-radius: var(--s5);
+  padding: var(--s-5) var(--s-2);
+  color: var(--clr-light);
+  font-weight: var(--fw-semi-bold);
+  text-transform: uppercase;
+}
+.movements__type--deposit {
+  background-image: linear-gradient(to top left, #39b385, #9be15d);
+}
+.movements__type--withdrawal {
+  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+}
+.movements .box p:nth-last-of-type(2) {
+  margin-inline-end: auto;
+}
+.movements .box p:last-of-type {
+  font-size: var(--s0);
+}
+
+/* operations */
+.operations .box {
+  padding-block: var(--s3);
+  border-radius: var(--s-2);
+}
+.operations p {
+  font-weight: var(--fw-semi-bold);
+}
+
+.operation--transfer {
+  background-image: linear-gradient(to top left, #ffb003, #ffcb03);
+}
+.operation--loan {
+  background-image: linear-gradient(to top left, #39b385, #9be15d);
+}
+.operation--close {
+  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+}
+
+/* EXCEPTION **************************************** */
