@@ -5,86 +5,106 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NG Bank</title>
+  <title>Document</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body>
+<body class="stack-comp">
 
-  <header class="container ctn100pct">
-    <nav class="[ cluster ][ jc:space-between fw:nowrap ]">
-      <p>Welcome back, Name!</p>
-      <img src="/assets/img/NG Flavicon 003.png" alt="logo">
-      <form class="[ cluster clus-s-4  ][ fw:nowrap ]">
-        <input type="text" placeholder="user">
-        <input type="password" placeholder="PIN">
-        <button>→</button>
-      </form>
-    </nav>
-  </header>
-
-  <main class="container cont-s2">
-    <article class="stack stack-s3">
-      <header class="[ cluster ][ jc:space-between ]">
-        <div>
-          <p>Current balance</p>
-          <p>As of <span>Date, Time</span></p>
-        </div>
-        <p>Balance €</p>
-      </header>
-
-      <div class="sidebar-right">
-        <section class="movements">
-          <div class="box cluster">
-            <p class="movements__type movements__type--withdrawal">X deposit</p>
-            <p>amount €</p>
-          </div>
-          <div class="box cluster">
-            <p class="movements__type movements__type--deposit">X deposit</p>
-            <p>X deposit</p>
-            <p>amount €</p>
-          </div>
-          <div class="box cluster">
-            <p class="movements__type movements__type--withdrawal">X deposit</p>
-            <p>amount €</p>
-          </div>
-          <div class="box cluster">
-            <p class="movements__type movements__type--withdrawal">X deposit</p>
-            <p>amount €</p>
-          </div>
-        </section>
-
-        <section class="[ stack stack-s-pad-comp ][ operations ]">
-          <div class="[ box ][ stack ][ operation--transfer ]">
-            <p>Transfer money</p>
-            <form>
-              <input type="text">
-              <input type="number">
-              <button>→</button>
-            </form>
-          </div>
-          <div class="[ box ][ operation--loan ]">
-            <form>
-              <input type="number">
-              <button>→</button>
-            </form>
-          </div>
-          <div class="[ box ][ operation--close ]">
-            <form>
-              <input type="text">
-              <input type="password">
-              <button>→</button>
-            </form>
-          </div>
-        </section>
+  <nav class="[ container cluster ][ flex-jc:sb ]">
+    <p>Log in to get started</p>
+    <img class="logo" src="/assets/img/NG Flavicon 003.png" alt="logo">
+    <form class="[ cluster ]">
+      <div>
+        <input type="text">
       </div>
+      <div class="[ cluster ][ flex-wrap:no ]">
+        <input type="text">
+        <button>btn</button>
+      </div>
+    </form>
+  </nav>
 
+  <main class="container stack-comp">
 
+    <!-- BALANCE HEADER -->
+    <header class="[ cluster ][ header-balance ]">
+      <div class="stack-elem">
+        <p>Current balance</p>
+        <p>As of 17/05/2022, 14:25</p>
+      </div>
+      <p>25 952,59 €</p>
+    </header>
 
-    </article>
+    <!-- SIDEBAR - START -->
+    <div class="sidebar-right">
+      <!-- MOVEMENTS -->
+      <section>
+        <div class="[ box cluster ][ movement ]">
+          <p>8 DEPOSIT</p>
+          <p>12/03/2020</p>
+          <p>1300,00 €</p>
+        </div>
+      </section>
+      <!-- OPERATIONS -->
+      <section class="stack-comp">
+        <!-- one operation box -->
+        <div class="[ box stack-block ][ operation transfer ]">
+          <p>Transfer money</p>
+          <form class="cluster">
+            <div class="[ stack ][ flex-ai:center flex-g:1 ]">
+              <input type="text">
+              <p>Transfer to</p>
+            </div>
+            <div class="[ cluster ][ flex-ai:start flex-g:1 ]">
+              <div class="[ stack ][ flex-ai:center flex-g:1 ]">
+                <input type="text">
+                <p>Amount</p>
+              </div>
+              <button>→</button>
+            </div>
+          </form>
+        </div>
+        <!-- one operation box -->
+        <div class="[ box stack-block ][ operation loan ]">
+          <p>Request loan</p>
+          <form class="cluster">
+            <div class="[ stack ][ flex-ai:center flex-g:1 ]">
+              <input type="text">
+              <p>Amount</p>
+            </div>
+            <div class="[ cluster ][ flex-ai:start flex-g:1 ]">
+              <div class="[ stack ][ flex-ai:center flex-g:1 ]">
+                <input type="text">
+                <p>Amount</p>
+              </div>
+              <button>→</button>
+            </div>
+          </form>
+        </div>
+        <!-- one operation box -->
+        <div class="[ box stack-block ][ operation close ]">
+          <p>Close account</p>
+          <form class="cluster">
+            <div class="[ stack ][ flex-ai:center flex-g:1 ]">
+              <input type="text">
+              <p>Confirm user</p>
+            </div>
+            <div class="[ cluster ][ flex-ai:start flex-g:1 ]">
+              <div class="[ stack ][ flex-ai:center flex-g:1 ]">
+                <input type="text">
+                <p>Confirm PIN</p>
+              </div>
+              <button>→</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+    <!-- SIDEBAR - END -->
+
   </main>
 
-  <script src="script.js"></script>
 </body>
 
 </html>
