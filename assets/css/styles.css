@@ -73,6 +73,7 @@
   /* color */
   --clr-light: white;
   --clr-dark: black;
+  --clr-gray: #888;
   --clr-bg: hsl(0, 0%, 95%);
   --clr-yellow1: #ffb003;
   --clr-yellow2: #ffcb03;
@@ -96,6 +97,7 @@ body {
 }
 
 nav {margin-block-start: var(--s-elem);}
+nav p {font-size: var(--s1); font-weight: var(--fw-600);}
 .logo {max-block-size: calc(var(--s2)*1.2);}
 
 /* main {visibility: hidden;} */
@@ -149,8 +151,16 @@ input {width: 100%;}
 .flex-jc\:sb {--justify-content: space-between;}
 .flex-g\:1 {flex-grow: 1;}
 
+.cluster-s1 {--s-cluster: var(--s1)}
+
+.stack-s-1 {--s-stack: var(--s-1)}
+.stack-s-3 {--s-elem: var(--s-3)}
+
 /* BLOCK **************************************** */
 .header-balance div {margin-inline-end: auto;}
+.header-balance div p:first-of-type {font-size: var(--s1); font-weight: var(--fw-600);}
+.header-balance div p:last-of-type {font-weight: var(--fw-300); color: var(--clr-gray);}
+#balance {font-size: var(--s2); font-weight: var(--fw-600);}
 
 .movement {background-color: white;}
 .movement:first-of-type {
@@ -177,7 +187,18 @@ input {width: 100%;}
 .type--deposit {background-image: var(--bg-image-green);}
 .type--withdrawal {background-image: var(--bg-image-red);}
 
+.summary p {text-transform: uppercase;}
+.summary span {
+  font-size: var(--s1);
+  padding-inline-start: var(--s-2);
+}
+.sum-in {color:var(--clr-green1);}
+.sum-out {color: var(--clr-red1);}
+.sum-int {color:var(--clr-green1);}
+
 .operation {border-radius: var(--s0);}
+.operation > p {font-weight: var(--fw-600);}
+.operation form p {font-size: var(--s-1); font-weight: var(--fw-400);}
 .transfer {background-image: var(--bg-image-yellow);}
 .loan {background-image: var(--bg-image-green);}
 .close {background-image: var(--bg-image-red);}

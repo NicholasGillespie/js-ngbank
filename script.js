@@ -1,8 +1,8 @@
 'use strict';
-
-// DATA ////////////////////////////////////////
+/*
+/* DATA //////////////////////////////////////// */
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Nicholas Gillespie',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -31,18 +31,74 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// ELEMENTS ////////////////////////////////////////
-// const labelWelcome = document.getElementById('welcome');
-// const labelBalance
-// const containerMain
-const containerMovements = document.getElementById('movements');
-// const btnLogin
-// const btnTransfer
-// const inputLoginUsername
+/*
+/* ELEMENTS //////////////////////////////////////// */
+const labelWelcome = document.getElementById('welcome');
+const labelBalance = document.getElementById('balance');
+const labelSumIn = document.querySelector('.sum-in');
+const labelSumOut = document.querySelector('.sum-out');
+const labelSumInterest = document.querySelector('.sum-int');
 
-// FUNCTIONS ////////////////////////////////////////
+const containerMain = document.querySelector('main');
+const containerMovements = document.getElementById('movements');
+
+const inputLoginUsername = document.getElementById('login-user');
+const inputLoginPassword = document.getElementById('login-pass');
+const btnLogin = document.getElementById('login-btn');
+// const btnTransfer
+
+/*
+/* FUNCTIONS //////////////////////////////////////// */
+// CREATE USERNAMES
+const createUsername = function (accounts) {
+  accounts.forEach(function (account) {
+    // creating a new property within each account objects
+    account.username = account.owner
+      .toLowerCase()
+      .split(' ')
+      .map((name) => name.charAt(0))
+      .join('');
+  });
+};
+createUsername(accounts);
+
+// DISPLAY BALANCE
+const displayBalance = function (movements) {
+  const balance = movements.reduce((acc, movement) => {
+    return acc + movement;
+  }, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+
+// DISPLAY DEPOSITS
+const displayDeposits = function (movements) {
+  const deposits = movements
+    .filter((movement) => movement > 0)
+    .reduce((acc, movement) => acc + movement, 0);
+  labelSumIn.textContent = `${deposits} €`;
+};
+// DISPLAY WITHDRAWALS
+const displayWithdrawals = function (movements) {
+  const deposits = movements
+    .filter((movement) => movement < 0)
+    .reduce((acc, movement) => acc + movement, 0);
+  labelSumOut.textContent = `${deposits} €`;
+};
+// DISPLAY INTEREST
+const displayInterest = function (movements) {
+  const interest = movements
+    .filter((movement) => movement > 0)
+    .map((deposit) => (deposit * 1.2) / 100)
+    .filter((int) => int >= 1)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest} €`;
+};
+
 // DISPLAY MOVEMENTS (movement, index)
 const displayMovements = function (movements) {
+  // innerHTML sets the HTML markup contained within the element
+  containerMovements.innerHTML = '';
+
   movements.forEach(function (movement, index) {
     const type = movement > 0 ? 'deposit' : 'withdrawal';
 
@@ -52,35 +108,42 @@ const displayMovements = function (movements) {
         <p>${movement} €</p>
       </div>
       `;
-    // insert adjacent html -> select item & apply function
+    // insertAdjacentHTML() parses the specified text as HTML and inserts the resulting nodes into the DOM tree at a specified position.
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
-// EVENT HANDLERS ////////////////////////////////////////
+/*
+/* EVENT HANDLERS //////////////////////////////////////// */
+let currentAccount; /* used throughout multi functions */
 
-// account1.movements.forEach((movement) => console.log(movement));
+// LOGGING IN ⚠
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    (account) => account.username === inputLoginUsername.value
+  );
+  // optional chaining = checks if currentAccount exists
+  // .pin property will only be read if currentAccount exists
+  if (currentAccount?.pin === Number(inputLoginPassword.value)) {
+    //
+    // DISPLAY WELCOME MESSAGE
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
 
-// CREATE USERNAME
-// const createUsername = function (account) {
-//   console.log(
-//     account.owner
-//       .toLowerCase()
-//       .split(' ')
-//       .map((name) => name.charAt(0))
-//       .join('')
-//   );
-// };
-// console.log(createUsername(account1));
+    // DISPLAY APP
+    containerMain.style.visibility = 'visible';
 
-// INSERT MOVEMENTS IN HTML
-// const displayMovements = function (params) {
-//   const html = `
-//   <div class="[ box cluster ][ movement ]">
-//     <p>${} ${}</p>
-//     <p>${}</p>
-//     <p>${} €</p>
-//   </div>
-// `;
-// };
+    // DISPLAY BALANCE
+    displayBalance(currentAccount.movements);
+
+    // DISPLAY MOVEMENTS (movement, index)
+    displayMovements(currentAccount.movements);
+
+    // DISPLAY SUMMARY
+    displayDeposits(account1.movements);
+    displayWithdrawals(account1.movements);
+    displayInterest(account1.movements);
+  }
+});
