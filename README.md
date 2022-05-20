@@ -10,16 +10,16 @@ Application allowing login, visualization of bank account movements, sort moveme
 
 ## Test application
 
-**Account login details**:
-username: ng **//** pin: 1
-username: jd **//** pin: 2222
-username: stw **//** pin: 3333
-username: sj **//** pin: 4444
+**Account login details**:  
+**username**: ng **//** pin: 1  
+**username**: jd **//** pin: 2222  
+**username**: stw **//** pin: 3333  
+**username**: sj **//** pin: 4444
 
 ## Layout
 
 Algorithmically adaptable interface.
 
-![Webpage screenshot](/images/screenshot.jpg)
+![Webpage screenshot](/assets/img/screenshot.jpg)
 
 ## _Dollar dollar bill, y'all_
