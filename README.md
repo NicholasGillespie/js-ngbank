@@ -4,8 +4,6 @@ JavaScript Application - Fictional bank app
 
 ## Project
 
-Un jeu visant à permettre à son utilisateur de deviner un "nombre secret", – généré aléatoirement –, entre 1 et 20 en 20 essais.
-
 Application allowing login, visualization of bank account movements, sort movements, transfer money, request a loan and close the account.
 
 ## Test application
