@@ -72,7 +72,7 @@
   
   /* color */
   --clr-light: white;
-  --clr-dark: black;
+  --clr-dark: #333;
   --clr-gray: #888;
   --clr-bg: hsl(0, 0%, 95%);
   --clr-yellow1: #ffb003;
@@ -88,6 +88,8 @@
 }
 
 /* GLOBALS **************************************** */
+html:focus-within {scroll-behavior: smooth;}
+
 body {
   background-color: var(--clr-bg);
   min-inline-size: var(--min-inline-size);
@@ -98,11 +100,14 @@ body {
 
 nav {margin-block-start: var(--s-elem);}
 nav p {font-size: var(--s1); font-weight: var(--fw-600);}
+
 .logo {max-block-size: calc(var(--s2)*1.2);}
 
 /* main {visibility: hidden;} */
 
 input {width: 100%;}
+/* nav :where(input) {border: 1px solid blue;} */
+/* input:not(:where(nav *)) {border: 1px solid red;} */
 
 /* COMPOSITION **************************************** */
 .container {
@@ -139,7 +144,7 @@ input {width: 100%;}
 .sidebar-right > :first-child {
   flex-basis: 0;
   flex-grow: 999;
-  min-inline-size: 45%;
+  min-inline-size: 40%;
 }
 
 /* UTLITY **************************************** */
@@ -151,7 +156,10 @@ input {width: 100%;}
 .flex-jc\:sb {--justify-content: space-between;}
 .flex-g\:1 {flex-grow: 1;}
 
+.cluster-s-1 {--s-cluster: var(--s-1)}
+.cluster-s0 {--s-cluster: var(--s0)}
 .cluster-s1 {--s-cluster: var(--s1)}
+.cluster-s2 {--s-cluster: var(--s2)}
 
 .stack-s-1 {--s-stack: var(--s-1)}
 .stack-s-3 {--s-elem: var(--s-3)}

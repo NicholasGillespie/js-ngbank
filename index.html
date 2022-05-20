@@ -11,22 +11,23 @@
 
 <body class="stack-comp">
 
-  <nav class="[ container cluster ][ container:fw flex-jc:sb ]">
+  <nav class="[ container cluster ][ container:fw flex-jc:sb cluster-s2 ]">
     <p id="welcome">Log in to get started</p>
-    <img class="logo" src="/assets/img/NG Flavicon 003.png" alt="logo">
+    <a class="cluster" href="/"><img class="logo" src="/assets/img/NG Flavicon 003.png" alt="logo"></a>
 
-    <form class="cluster">
+
+    <form class="[ cluster ][ cluster-s-1 ]">
       <div style="display: flex;">
-        <input id="login-user" type="text">
+        <input id="login-user" type="text" placeholder="user">
       </div>
       <div class="[ cluster ][ flex-wrap:no ]">
-        <input id="login-pass" type="password">
+        <input id="login-pass" type="password" placeholder="PIN">
         <button id="login-btn">btn</button>
       </div>
     </form>
   </nav>
 
-  <main class="container stack-comp">
+  <main class="[ container ][ stack-comp ]">
 
     <!-- BALANCE HEADER -->
     <header class="[ cluster ][ header-balance ]">
@@ -59,7 +60,7 @@
             <div class="">
               <p>interest <span class="sum-int">X €</span></p>
             </div>
-            <button>SORT</button>
+            <button id="btn-sort">SORT</button>
           </div>
         </section>
       </div>
@@ -70,32 +71,28 @@
           <p>Transfer money</p>
           <form class="cluster">
             <div class="[ stack stack-s-1 ][ flex-ai:center flex-g:1 ]">
-              <input type="text">
+              <input id="transfer-to-user" type="text">
               <p>Transfer to</p>
             </div>
             <div class="[ cluster ][ flex-ai:start flex-g:1 ]">
               <div class="[ stack stack-s-1 ][ flex-ai:center flex-g:1 ]">
-                <input type="text">
+                <input id="transfer-amount" number="text">
                 <p>Amount</p>
               </div>
-              <button>→</button>
+              <button id="transfer-btn">→</button>
             </div>
           </form>
         </div>
         <!-- one operation box -->
         <div class="[ box stack-block ][ operation loan ]">
           <p>Request loan</p>
-          <form class="cluster">
-            <div class="[ stack stack-s-1 ][ flex-ai:center flex-g:1 ]">
-              <input type="text">
-              <p>Amount</p>
-            </div>
+          <form>
             <div class="[ cluster ][ flex-ai:start flex-g:1 ]">
               <div class="[ stack stack-s-1 ][ flex-ai:center flex-g:1 ]">
-                <input type="text">
+                <input id="loan-amount" type="text">
                 <p>Amount</p>
               </div>
-              <button>→</button>
+              <button id="loan-btn">→</button>
             </div>
           </form>
         </div>
@@ -104,15 +101,15 @@
           <p>Close account</p>
           <form class="cluster">
             <div class="[ stack stack-s-1 ][ flex-ai:center flex-g:1 ]">
-              <input type="text">
+              <input id="close-user" type="text">
               <p>Confirm user</p>
             </div>
             <div class="[ cluster ][ flex-ai:start flex-g:1 ]">
               <div class="[ stack stack-s-1 ][ flex-ai:center flex-g:1 ]">
-                <input type="text">
+                <input id="close-pin" type="password">
                 <p>Confirm PIN</p>
               </div>
-              <button>→</button>
+              <button id="close-btn">→</button>
             </div>
           </form>
         </div>
