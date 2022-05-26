@@ -72,8 +72,8 @@
   
   /* color */
   --clr-light: white;
-  --clr-dark: #333;
   --clr-gray: #888;
+  --clr-dark: #333;
   --clr-bg: hsl(0, 0%, 95%);
   --clr-yellow1: #ffb003;
   --clr-yellow2: #ffcb03;

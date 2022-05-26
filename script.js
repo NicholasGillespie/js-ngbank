@@ -3,9 +3,22 @@
 /* DATA //////////////////////////////////////// */
 const account1 = {
   owner: 'Nicholas Gillespie',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
   pin: 1,
+
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+  ],
+  currency: 'EUR',
+  locale: 'fr-FR',
 };
 
 const account2 = {
@@ -13,31 +26,32 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+
+  movementsDates: [
+    '2019-11-01T13:15:33.035Z',
+    '2019-11-30T09:48:16.867Z',
+    '2019-12-25T06:04:23.907Z',
+    '2020-01-25T14:18:46.235Z',
+    '2020-02-05T16:33:06.386Z',
+    '2020-04-10T14:43:26.374Z',
+    '2020-06-25T18:49:59.371Z',
+    '2020-07-26T12:01:20.894Z',
+  ],
+  currency: 'USD',
+  locale: 'en-US',
 };
 
-const account3 = {
-  owner: 'Steven Thomas Williams',
-  movements: [200, -200, 340, -300, -20, 50, 400, -460],
-  interestRate: 0.7,
-  pin: 3333,
-};
-
-const account4 = {
-  owner: 'Sarah John',
-  movements: [430, 1000, 700, 50, 90],
-  interestRate: 1,
-  pin: 4444,
-};
-
-const accounts = [account1, account2, account3, account4];
+const accounts = [account1, account2];
 
 /*
 /* ELEMENTS //////////////////////////////////////// */
 const labelWelcome = document.getElementById('welcome');
+const btnLogo = document.querySelector('.logo');
 const labelBalance = document.getElementById('balance');
 
 const containerMain = document.querySelector('main');
 const containerMovements = document.getElementById('movements');
+const boxMovement = document.getElementById('movement');
 
 const labelSumIn = document.querySelector('.sum-in');
 const labelSumOut = document.querySelector('.sum-out');
@@ -80,7 +94,7 @@ const displayBalance = function (account) {
     (acc, movement) => acc + movement,
     0
   );
-  labelBalance.textContent = `${account.balance} €`;
+  labelBalance.textContent = `${account.balance.toFixed(2)} €`;
 };
 
 // DISPLAY SUMMARY > deposits, withdrawals, interest
@@ -88,17 +102,17 @@ const displaySummary = function (account) {
   const deposits = account.movements
     .filter((movement) => movement > 0)
     .reduce((acc, movement) => acc + movement, 0);
-  labelSumIn.textContent = `${deposits} €`;
+  labelSumIn.textContent = `${deposits.toFixed(2)} €`;
   const withdrawal = account.movements
     .filter((movement) => movement < 0)
     .reduce((acc, movement) => acc + movement, 0);
-  labelSumOut.textContent = `${Math.abs(withdrawal)} €`;
+  labelSumOut.textContent = `${Math.abs(withdrawal).toFixed(2)} €`;
   const interest = account.movements
     .filter((movement) => movement > 0)
     .map((deposit) => (deposit * account.interestRate) / 100)
     .filter((int) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest} €`;
+  labelSumInterest.textContent = `${interest.toFixed(2)} €`;
 };
 
 // DISPLAY MOVEMENTS & SORT
@@ -116,7 +130,7 @@ const displayMovements = function (account, sort = false) {
     const html = `
       <div class="[ box cluster ][ movement ]">
         <p class="type type--${type}">${index + 1} ${type}</p>
-        <p>${movement} €</p>
+        <p id="mov">${movement.toFixed(2)} €</p>
       </div>
       `;
     // insertAdjacentHTML() parses the specified text as HTML and inserts the resulting nodes into the DOM tree at a specified position.
@@ -168,7 +182,7 @@ btnLogin.addEventListener('click', function (e) {
   }
 });
 
-let sort = false;
+let sort = false; /* state variable */
 // SORT MOVEMENTS
 btnSort.addEventListener('click', function (e) {
   e.preventDefault;
@@ -214,13 +228,15 @@ btnClose.addEventListener('click', function (e) {
     accounts.splice(index, 1);
     document.documentElement.scrollTop = 0;
     containerMain.style.visibility = 'hidden';
+    labelWelcome.textContent = 'Log in to get started';
   }
 });
 
 // REQUEST LOAN
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputLoan.value);
+  const amount = Math.floor(inputLoan.value);
+
   // movement needs to be greater than 10% of the requested amount
   if (
     amount > 0 &&
@@ -234,3 +250,37 @@ btnLoan.addEventListener('click', function (e) {
     inputLoan.blur();
   }
 });
+
+btnLogo.addEventListener('click', function (e) {
+  e.preventDefault;
+  const movementsUI = Array.from(document.querySelectorAll('#mov'), (el) =>
+    Number(el.textContent.replace('€', ''))
+  );
+
+  console.log(movementsUI);
+
+  console.log(
+    [...document.querySelectorAll('.movement')].forEach((row, i) => {
+      if (i % 2 === 1) row.style.backgroundColor = 'lightgreen';
+    })
+  );
+});
+
+/*
+/* TESTS //////////////////////////////////////// */
+// TOTAL DEPOSIT AMOUNT
+const bankDepositSum = accounts
+  .flatMap((account) => account.movements)
+  .filter((movement) => movement > 0)
+  .reduce((sum, movement) => sum + movement);
+// console.log(bankDepositSum);
+
+// NUMBER OF 1k+ DEPOSITS
+const bigDeposits = accounts
+  .flatMap((accounts) => accounts.movements)
+  .filter((mov) => mov >= 1000).length;
+// console.log(bigDeposits);
+
+const randomInt = (min, max) =>
+  Math.trunc(Math.random() * (max - min + 1)) + min;
+console.log(randomInt(1, 6));
