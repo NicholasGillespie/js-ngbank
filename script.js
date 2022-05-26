@@ -48,6 +48,7 @@ const accounts = [account1, account2];
 const labelWelcome = document.getElementById('welcome');
 const btnLogo = document.querySelector('.logo');
 const labelBalance = document.getElementById('balance');
+const labelBalanceDate = document.getElementById('balance-date');
 
 const containerMain = document.querySelector('main');
 const containerMovements = document.getElementById('movements');
@@ -127,9 +128,18 @@ const displayMovements = function (account, sort = false) {
 
   movs.forEach(function (movement, index) {
     const type = movement > 0 ? 'deposit' : 'withdrawal';
+
+    const date = new Date(account.movementsDates[index]);
+
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
+
     const html = `
       <div class="[ box cluster ][ movement ]">
         <p class="type type--${type}">${index + 1} ${type}</p>
+        <p id="mov-date">${displayDate}</p>
         <p id="mov">${movement.toFixed(2)} €</p>
       </div>
       `;
@@ -154,6 +164,10 @@ const updateUI = function (account) {
 /* EVENT HANDLERS //////////////////////////////////////// */
 let currentAccount; /* used throughout multi functions */
 
+// FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+
 // LOGGING IN ⚠
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
@@ -168,6 +182,15 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
+
+    // CREATE CURRENT DATE
+    const now = new Date();
+    const day = `${now.getDay()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    const year = now.getFullYear();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const min = `${now.getMinutes()}`.padStart(2, 0);
+    labelBalanceDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
     // DISPLAY APP
     containerMain.style.visibility = 'visible';
@@ -207,6 +230,9 @@ btnTransfer.addEventListener('click', function (e) {
     // IMPLEMENT TRANSFER
     currentAccount.movements.push(-amount);
     receiverAccount.movements.push(amount);
+    // ADD TRANSFER DATE
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAccount.movementsDates.push(new Date().toISOString());
     // UPDATE UI
     updateUI(currentAccount);
     inputTransferReceiver.value = inputTransferAmount.value = '';
@@ -244,6 +270,8 @@ btnLoan.addEventListener('click', function (e) {
   ) {
     // ADD MOVEMENT
     currentAccount.movements.push(amount);
+    // ADD TRANSFER DATE
+    currentAccount.movementsDates.push(new Date().toISOString());
     // UPDATE UI
     updateUI(currentAccount);
     inputLoan.value = '';
@@ -280,7 +308,3 @@ const bigDeposits = accounts
   .flatMap((accounts) => accounts.movements)
   .filter((mov) => mov >= 1000).length;
 // console.log(bigDeposits);
-
-const randomInt = (min, max) =>
-  Math.trunc(Math.random() * (max - min + 1)) + min;
-console.log(randomInt(1, 6));
