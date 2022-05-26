@@ -13,7 +13,7 @@
 
   <nav class="[ container cluster ][ container:fw flex-jc:sb cluster-s2 ]">
     <p id="welcome">Log in to get started</p>
-    <a class="cluster" href="/"><img class="logo" src="/assets/img/NG Flavicon 003.png" alt="logo"></a>
+    <img class="logo" src="/assets/img/NG Flavicon 003.png" alt="logo">
 
 
     <form class="[ cluster ][ cluster-s-1 ]">
@@ -33,7 +33,7 @@
     <header class="[ cluster ][ header-balance ]">
       <div class="[ stack-elem ][ stack-s-3 ]">
         <p>Current balance</p>
-        <p>As of xx/xx/xxxx, xx:xx</p>
+        <p>As of <span id="balance-date">xx/xx/xxxx, xx:xx</span></p>
       </div>
       <p id="balance">X €</p>
     </header>
@@ -43,10 +43,9 @@
       <!-- MOVEMENTS -->
       <div class="stack">
         <section id="movements">
-          <!-- <div id="movement" class="[ box cluster ][ movement ]">
-            <p>8 DEPOSIT</p>
-            <p>12/03/2020</p>
-            <p>1300,00 €</p>
+          <!-- <div class="[ box cluster ][ movement ]">
+            <p class="type type--${type}">${index + 1} ${type}</p>
+            <p id="mov">${movement} €</p>
           </div> -->
         </section>
         <section class="summary">
