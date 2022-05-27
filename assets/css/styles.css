@@ -179,6 +179,7 @@ input {width: 100%;}
   border-end-start-radius: var(--s0);
   border-end-end-radius: var(--s0);
 }
+.movement p {text-transform: uppercase;}
 .movement p:nth-last-of-type(2) {margin-inline-end: auto;}
 .movement p:last-of-type {
   font-size: var(--s1);
