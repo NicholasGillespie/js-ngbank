@@ -89,13 +89,25 @@ const createUsername = function (accounts) {
 };
 createUsername(accounts);
 
+// FORMAT CURRENCY
+const formatCurrency = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
 // DISPLAY BALANCE
 const displayBalance = function (account) {
   account.balance = account.movements.reduce(
     (acc, movement) => acc + movement,
     0
   );
-  labelBalance.textContent = `${account.balance.toFixed(2)} €`;
+  labelBalance.textContent = `${formatCurrency(
+    account.balance,
+    account.locale,
+    account.currency
+  )}`;
 };
 
 // DISPLAY SUMMARY > deposits, withdrawals, interest
@@ -103,17 +115,29 @@ const displaySummary = function (account) {
   const deposits = account.movements
     .filter((movement) => movement > 0)
     .reduce((acc, movement) => acc + movement, 0);
-  labelSumIn.textContent = `${deposits.toFixed(2)} €`;
+  labelSumIn.textContent = `${formatCurrency(
+    deposits,
+    account.locale,
+    account.currency
+  )}`;
   const withdrawal = account.movements
     .filter((movement) => movement < 0)
     .reduce((acc, movement) => acc + movement, 0);
-  labelSumOut.textContent = `${Math.abs(withdrawal).toFixed(2)} €`;
+  labelSumOut.textContent = `${formatCurrency(
+    withdrawal,
+    account.locale,
+    account.currency
+  )}`;
   const interest = account.movements
     .filter((movement) => movement > 0)
     .map((deposit) => (deposit * account.interestRate) / 100)
     .filter((int) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)} €`;
+  labelSumInterest.textContent = `${formatCurrency(
+    interest,
+    account.locale,
+    account.currency
+  )}`;
 };
 
 // TIME
@@ -151,11 +175,17 @@ const displayMovements = function (account, sort = false) {
     const date = new Date(account.movementsDates[index]);
     const displayDate = formatMovementDate(date, account.locale);
 
+    const formattedMovement = formatCurrency(
+      movement,
+      account.locale,
+      account.currency
+    );
+
     const html = `
       <div class="[ box cluster ][ movement ]">
         <p class="type type--${type}">${index + 1} ${type}</p>
         <p id="mov-date">${displayDate}</p>
-        <p id="mov">${movement.toFixed(2)} €</p>
+        <p id="mov">${formattedMovement}</p>
       </div>
       `;
     // insertAdjacentHTML() parses the specified text as HTML and inserts the resulting nodes into the DOM tree at a specified position.
@@ -178,10 +208,6 @@ const updateUI = function (account) {
 /*
 /* EVENT HANDLERS - (eh) //////////////////////////////////////// */
 let currentAccount; /* used throughout multi functions */
-
-// FAKE ALWAYS LOGGED IN
-// currentAccount = account1;
-// updateUI(currentAccount);
 
 // LOGGING IN ⚠
 btnLogin.addEventListener('click', function (e) {
