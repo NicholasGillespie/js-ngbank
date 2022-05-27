@@ -1,6 +1,6 @@
 'use strict';
 /*
-/* DATA //////////////////////////////////////// */
+/* DATA - (dt) //////////////////////////////////////// */
 const account1 = {
   owner: 'Nicholas Gillespie',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
@@ -44,7 +44,7 @@ const account2 = {
 const accounts = [account1, account2];
 
 /*
-/* ELEMENTS //////////////////////////////////////// */
+/* ELEMENTS - (els) //////////////////////////////////////// */
 const labelWelcome = document.getElementById('welcome');
 const btnLogo = document.querySelector('.logo');
 const labelBalance = document.getElementById('balance');
@@ -75,7 +75,7 @@ const inputClosePin = document.getElementById('close-pin');
 const btnClose = document.getElementById('close-btn');
 
 /*
-/* FUNCTIONS //////////////////////////////////////// */
+/* FUNCTIONS - (fx) //////////////////////////////////////// */
 // CREATE USERNAMES
 const createUsername = function (accounts) {
   accounts.forEach(function (account) {
@@ -117,7 +117,7 @@ const displaySummary = function (account) {
 };
 
 // TIME
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   // calculate days between now and date of movement
   const calcDaysPassed = function (date1, date2) {
     return Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
@@ -128,10 +128,11 @@ const formatMovementDate = function (date) {
   if (daysPassed === 1) return `Yesterday`;
   if (daysPassed <= 7) return `${daysPassed} Days ago`;
   // if not captured by conditions with return, the following happens:
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  // const day = `${date.getDate()}`.padStart(2, 0);
+  // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  // const year = date.getFullYear();
+  // return `${day}/${month}/${year}`;
+  return new Intl.DateTimeFormat(locale).format(date);
 };
 
 // DISPLAY MOVEMENTS & SORT
@@ -148,7 +149,7 @@ const displayMovements = function (account, sort = false) {
     const type = movement > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(account.movementsDates[index]);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, account.locale);
 
     const html = `
       <div class="[ box cluster ][ movement ]">
@@ -175,7 +176,7 @@ const updateUI = function (account) {
 };
 
 /*
-/* EVENT HANDLERS //////////////////////////////////////// */
+/* EVENT HANDLERS - (eh) //////////////////////////////////////// */
 let currentAccount; /* used throughout multi functions */
 
 // FAKE ALWAYS LOGGED IN
@@ -198,13 +199,28 @@ btnLogin.addEventListener('click', function (e) {
     }`;
 
     // CREATE CURRENT DATE
+    // const now = new Date();
+    // const day = `${now.getDay()}`.padStart(2, 0);
+    // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+    // labelBalanceDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
+    // USING JS Intl API
     const now = new Date();
-    const day = `${now.getDay()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
-    labelBalanceDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    const options = {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      // weekday: 'short',
+    };
+    labelBalanceDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
     // DISPLAY APP
     containerMain.style.visibility = 'visible';
