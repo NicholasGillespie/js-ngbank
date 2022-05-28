@@ -324,14 +324,16 @@ btnLoan.addEventListener('click', function (e) {
     amount > 0 &&
     currentAccount.movements.some((movement) => movement >= amount * 0.1)
   ) {
-    // ADD MOVEMENT
-    currentAccount.movements.push(amount);
-    // ADD TRANSFER DATE
-    currentAccount.movementsDates.push(new Date().toISOString());
-    // UPDATE UI
-    updateUI(currentAccount);
-    inputLoan.value = '';
-    inputLoan.blur();
+    setTimeout(function () {
+      // ADD MOVEMENT
+      currentAccount.movements.push(amount);
+      // ADD TRANSFER DATE
+      currentAccount.movementsDates.push(new Date().toISOString());
+      // UPDATE UI
+      updateUI(currentAccount);
+      inputLoan.value = '';
+      inputLoan.blur();
+    }, 3000);
   }
 });
 
