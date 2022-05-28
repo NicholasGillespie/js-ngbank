@@ -66,13 +66,14 @@ const btnLogin = document.getElementById('login-btn');
 const inputTransferReceiver = document.getElementById('transfer-to-user');
 const inputTransferAmount = document.getElementById('transfer-amount');
 const btnTransfer = document.getElementById('transfer-btn');
-
 const inputLoan = document.getElementById('loan-amount');
 const btnLoan = document.getElementById('loan-btn');
-
 const inputCloseUser = document.getElementById('close-user');
 const inputClosePin = document.getElementById('close-pin');
 const btnClose = document.getElementById('close-btn');
+
+const timerLabel = document.getElementById('timer');
+const timerTimeLabel = document.getElementById('timer-time');
 
 /*
 /* FUNCTIONS - (fx) //////////////////////////////////////// */
@@ -205,9 +206,33 @@ const updateUI = function (account) {
   displaySummary(currentAccount);
 };
 
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // in each call, print remaining time to UI
+    timerTimeLabel.textContent = `${min}:${sec}`;
+    // when 0 seconds, stop timer and logout
+    if (time === 0) {
+      clearInterval(timer);
+      document.documentElement.scrollTop = 0;
+      containerMain.style.visibility = 'hidden';
+      labelWelcome.textContent = 'Log in to get started';
+    }
+    // decrease 1 second
+    time--;
+  };
+  // set timer
+  let time = 120;
+  // call timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
 /*
 /* EVENT HANDLERS - (eh) //////////////////////////////////////// */
-let currentAccount; /* used throughout multi functions */
+let currentAccount, timer; /* used throughout multi functions */
 
 // LOGGING IN ⚠
 btnLogin.addEventListener('click', function (e) {
@@ -256,6 +281,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.blur();
     inputLoginPassword.blur();
 
+    // START LOG OUT COUNTDOWN
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
+
     // UPDATE UI
     updateUI(currentAccount);
   }
@@ -294,6 +323,9 @@ btnTransfer.addEventListener('click', function (e) {
     inputTransferReceiver.value = inputTransferAmount.value = '';
     inputTransferReceiver.blur();
     inputTransferAmount.blur();
+    // RESET TIMER
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -334,6 +366,9 @@ btnLoan.addEventListener('click', function (e) {
       inputLoan.value = '';
       inputLoan.blur();
     }, 3000);
+    // RESET TIMER
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 

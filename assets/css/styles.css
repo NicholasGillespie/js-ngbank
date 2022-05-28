@@ -103,7 +103,7 @@ nav p {font-size: var(--s1); font-weight: var(--fw-600);}
 
 .logo {max-block-size: calc(var(--s2)*1.2);}
 
-/* main {visibility: hidden;} */
+main {visibility: hidden;}
 
 input {width: 100%;}
 /* nav :where(input) {border: 1px solid blue;} */
@@ -211,3 +211,9 @@ input {width: 100%;}
 .transfer {background-image: var(--bg-image-yellow);}
 .loan {background-image: var(--bg-image-green);}
 .close {background-image: var(--bg-image-red);}
+
+#timer {
+  text-align: end; 
+  padding-inline-end: var(--s2);
+}
+#timer-time{font-weight: var(--fw-700);}
