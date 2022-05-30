@@ -1,6 +1,6 @@
 'use strict';
 /*
-/* DATA //////////////////////////////////////// */
+/* DATA - (dt) //////////////////////////////////////// */
 const account1 = {
   owner: 'Nicholas Gillespie',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
@@ -13,9 +13,9 @@ const account1 = {
     '2020-01-28T09:15:04.904Z',
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2022-05-20T17:01:17.194Z',
+    '2022-05-26T16:36:17.929Z',
+    '2022-05-27T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'fr-FR',
@@ -44,7 +44,7 @@ const account2 = {
 const accounts = [account1, account2];
 
 /*
-/* ELEMENTS //////////////////////////////////////// */
+/* ELEMENTS - (els) //////////////////////////////////////// */
 const labelWelcome = document.getElementById('welcome');
 const btnLogo = document.querySelector('.logo');
 const labelBalance = document.getElementById('balance');
@@ -66,16 +66,17 @@ const btnLogin = document.getElementById('login-btn');
 const inputTransferReceiver = document.getElementById('transfer-to-user');
 const inputTransferAmount = document.getElementById('transfer-amount');
 const btnTransfer = document.getElementById('transfer-btn');
-
 const inputLoan = document.getElementById('loan-amount');
 const btnLoan = document.getElementById('loan-btn');
-
 const inputCloseUser = document.getElementById('close-user');
 const inputClosePin = document.getElementById('close-pin');
 const btnClose = document.getElementById('close-btn');
 
+const timerLabel = document.getElementById('timer');
+const timerTimeLabel = document.getElementById('timer-time');
+
 /*
-/* FUNCTIONS //////////////////////////////////////// */
+/* FUNCTIONS - (fx) //////////////////////////////////////// */
 // CREATE USERNAMES
 const createUsername = function (accounts) {
   accounts.forEach(function (account) {
@@ -89,13 +90,25 @@ const createUsername = function (accounts) {
 };
 createUsername(accounts);
 
+// FORMAT CURRENCY
+const formatCurrency = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
 // DISPLAY BALANCE
 const displayBalance = function (account) {
   account.balance = account.movements.reduce(
     (acc, movement) => acc + movement,
     0
   );
-  labelBalance.textContent = `${account.balance.toFixed(2)} €`;
+  labelBalance.textContent = `${formatCurrency(
+    account.balance,
+    account.locale,
+    account.currency
+  )}`;
 };
 
 // DISPLAY SUMMARY > deposits, withdrawals, interest
@@ -103,17 +116,48 @@ const displaySummary = function (account) {
   const deposits = account.movements
     .filter((movement) => movement > 0)
     .reduce((acc, movement) => acc + movement, 0);
-  labelSumIn.textContent = `${deposits.toFixed(2)} €`;
+  labelSumIn.textContent = `${formatCurrency(
+    deposits,
+    account.locale,
+    account.currency
+  )}`;
   const withdrawal = account.movements
     .filter((movement) => movement < 0)
     .reduce((acc, movement) => acc + movement, 0);
-  labelSumOut.textContent = `${Math.abs(withdrawal).toFixed(2)} €`;
+  labelSumOut.textContent = `${formatCurrency(
+    withdrawal,
+    account.locale,
+    account.currency
+  )}`;
   const interest = account.movements
     .filter((movement) => movement > 0)
     .map((deposit) => (deposit * account.interestRate) / 100)
     .filter((int) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)} €`;
+  labelSumInterest.textContent = `${formatCurrency(
+    interest,
+    account.locale,
+    account.currency
+  )}`;
+};
+
+// TIME
+const formatMovementDate = function (date, locale) {
+  // calculate days between now and date of movement
+  const calcDaysPassed = function (date1, date2) {
+    return Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+  };
+
+  const daysPassed = calcDaysPassed(new Date(), date);
+  if (daysPassed === 0) return `Today`;
+  if (daysPassed === 1) return `Yesterday`;
+  if (daysPassed <= 7) return `${daysPassed} Days ago`;
+  // if not captured by conditions with return, the following happens:
+  // const day = `${date.getDate()}`.padStart(2, 0);
+  // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  // const year = date.getFullYear();
+  // return `${day}/${month}/${year}`;
+  return new Intl.DateTimeFormat(locale).format(date);
 };
 
 // DISPLAY MOVEMENTS & SORT
@@ -130,17 +174,19 @@ const displayMovements = function (account, sort = false) {
     const type = movement > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(account.movementsDates[index]);
+    const displayDate = formatMovementDate(date, account.locale);
 
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const year = date.getFullYear();
-    const displayDate = `${day}/${month}/${year}`;
+    const formattedMovement = formatCurrency(
+      movement,
+      account.locale,
+      account.currency
+    );
 
     const html = `
       <div class="[ box cluster ][ movement ]">
         <p class="type type--${type}">${index + 1} ${type}</p>
         <p id="mov-date">${displayDate}</p>
-        <p id="mov">${movement.toFixed(2)} €</p>
+        <p id="mov">${formattedMovement}</p>
       </div>
       `;
     // insertAdjacentHTML() parses the specified text as HTML and inserts the resulting nodes into the DOM tree at a specified position.
@@ -160,13 +206,33 @@ const updateUI = function (account) {
   displaySummary(currentAccount);
 };
 
-/*
-/* EVENT HANDLERS //////////////////////////////////////// */
-let currentAccount; /* used throughout multi functions */
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // in each call, print remaining time to UI
+    timerTimeLabel.textContent = `${min}:${sec}`;
+    // when 0 seconds, stop timer and logout
+    if (time === 0) {
+      clearInterval(timer);
+      document.documentElement.scrollTop = 0;
+      containerMain.style.visibility = 'hidden';
+      labelWelcome.textContent = 'Log in to get started';
+    }
+    // decrease 1 second
+    time--;
+  };
+  // set timer
+  let time = 120;
+  // call timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
 
-// FAKE ALWAYS LOGGED IN
-// currentAccount = account1;
-// updateUI(currentAccount);
+/*
+/* EVENT HANDLERS - (eh) //////////////////////////////////////// */
+let currentAccount, timer; /* used throughout multi functions */
 
 // LOGGING IN ⚠
 btnLogin.addEventListener('click', function (e) {
@@ -184,13 +250,28 @@ btnLogin.addEventListener('click', function (e) {
     }`;
 
     // CREATE CURRENT DATE
+    // const now = new Date();
+    // const day = `${now.getDay()}`.padStart(2, 0);
+    // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+    // labelBalanceDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
+    // USING JS Intl API
     const now = new Date();
-    const day = `${now.getDay()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
-    labelBalanceDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    const options = {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      // weekday: 'short',
+    };
+    labelBalanceDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
     // DISPLAY APP
     containerMain.style.visibility = 'visible';
@@ -199,6 +280,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPassword.value = '';
     inputLoginUsername.blur();
     inputLoginPassword.blur();
+
+    // START LOG OUT COUNTDOWN
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
 
     // UPDATE UI
     updateUI(currentAccount);
@@ -238,6 +323,9 @@ btnTransfer.addEventListener('click', function (e) {
     inputTransferReceiver.value = inputTransferAmount.value = '';
     inputTransferReceiver.blur();
     inputTransferAmount.blur();
+    // RESET TIMER
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -268,14 +356,19 @@ btnLoan.addEventListener('click', function (e) {
     amount > 0 &&
     currentAccount.movements.some((movement) => movement >= amount * 0.1)
   ) {
-    // ADD MOVEMENT
-    currentAccount.movements.push(amount);
-    // ADD TRANSFER DATE
-    currentAccount.movementsDates.push(new Date().toISOString());
-    // UPDATE UI
-    updateUI(currentAccount);
-    inputLoan.value = '';
-    inputLoan.blur();
+    setTimeout(function () {
+      // ADD MOVEMENT
+      currentAccount.movements.push(amount);
+      // ADD TRANSFER DATE
+      currentAccount.movementsDates.push(new Date().toISOString());
+      // UPDATE UI
+      updateUI(currentAccount);
+      inputLoan.value = '';
+      inputLoan.blur();
+    }, 3000);
+    // RESET TIMER
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -308,3 +401,22 @@ const bigDeposits = accounts
   .flatMap((accounts) => accounts.movements)
   .filter((mov) => mov >= 1000).length;
 // console.log(bigDeposits);
+
+// const bday = new Date(' Feb 24 1986');
+// const age = Date.now() - bday;
+// console.log(age.toISOString());
+
+// const now = Date.now();
+// const bday = new Date('24 Feb 1986').getTime();
+
+// console.log(new Date());
+
+// console.log(now);
+// console.log(bday);
+
+// const daysPassed = function (now, date) {
+//   return (now - date) / (1000 * 60 * 60 * 24 * 365);
+// };
+
+// const result = daysPassed(now, bday);
+// console.log(`Days passed since : ${result}`);
