@@ -401,22 +401,3 @@ const bigDeposits = accounts
   .flatMap((accounts) => accounts.movements)
   .filter((mov) => mov >= 1000).length;
 // console.log(bigDeposits);
-
-// const bday = new Date(' Feb 24 1986');
-// const age = Date.now() - bday;
-// console.log(age.toISOString());
-
-// const now = Date.now();
-// const bday = new Date('24 Feb 1986').getTime();
-
-// console.log(new Date());
-
-// console.log(now);
-// console.log(bday);
-
-// const daysPassed = function (now, date) {
-//   return (now - date) / (1000 * 60 * 60 * 24 * 365);
-// };
-
-// const result = daysPassed(now, bday);
-// console.log(`Days passed since : ${result}`);

@@ -4,7 +4,7 @@ JavaScript Application - Fictional bank app
 
 ## Project
 
-Application allowing login, visualization of bank account movements, sort movements, transfer money, request a loan and close the account.
+Application allowing login, visualization of bank account movements, sort movements, transfer money to another account, request a loan, close the account and logout user using set & clearInterval.
 
 ## Layout
 
@@ -16,8 +16,6 @@ Algorithmically adaptable interface.
 
 **Account login details**:  
 **username**: ng **//** pin: 1  
-**username**: jd **//** pin: 2222  
-**username**: stw **//** pin: 3333  
-**username**: sj **//** pin: 4444
+**username**: jd **//** pin: 2222
 
 ## _Dollar dollar bill, y'all_
